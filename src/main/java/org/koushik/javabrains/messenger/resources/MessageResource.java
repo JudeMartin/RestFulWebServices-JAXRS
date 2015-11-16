@@ -66,6 +66,10 @@ public class MessageResource {
 	
 	/*
 	 * Add comments via another instance
+	 * 
+	 * DELEGATION
+	 * 
+	 * Parent Resource
 	 * */
 	@Path("/{messageId}/comments")
 	public CommentResource getCommentResourcetest(){
