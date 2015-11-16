@@ -63,4 +63,12 @@ public class MessageResource {
 		msgService.removeMessage(messageId);
 	}
 	
+	
+	/*
+	 * Add comments via another instance
+	 * */
+	@Path("/{messageId}/comments")
+	public CommentResource getCommentResourcetest(){
+		return new CommentResource();
+	}
 }
