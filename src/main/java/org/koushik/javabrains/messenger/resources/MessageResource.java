@@ -1,4 +1,6 @@
 package org.koushik.javabrains.messenger.resources;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ws.rs.BeanParam;
@@ -10,7 +12,10 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.koushik.javabrains.messenger.model.Message;
 import org.koushik.javabrains.messenger.resources.beans.MessageFilterBean;
@@ -33,12 +38,22 @@ public class MessageResource {
 	}
 	
 	
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Message addMessage(Message msg){
-		return msgService.addMessage(msg);
+	@POST 
+	public Response addMessage(Message message,@Context UriInfo uriInfo) throws URISyntaxException{
+		/**
+		 * 
+		 * Added the uri => location
+		 * 
+		 * */
+		System.out.println();
+		Message newMessage = msgService.addMessage(message);
+		String newId = String.valueOf(newMessage.getId());
+		URI uri = uriInfo.getAbsolutePathBuilder().path(newId).build();
+		return Response.created(uri)
+		.entity(newMessage)
+		.build();
 	}
+	
 	
 	@PUT
 	@Path("/{messageId}")
@@ -62,6 +77,9 @@ public class MessageResource {
 	public void removeMessage(@PathParam("messageId")long messageId){
 		msgService.removeMessage(messageId);
 	}
+	
+	// sending the response using the 
+	//response builder
 	
 	
 	/*
